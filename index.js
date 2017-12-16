@@ -166,6 +166,22 @@ exports.connect = (username, password) => {
   });
 };
 
+exports.reconnect = function () {
+  const query = `/my/reconnect?appkey=${encodeURI(__APPKEY)}&sessiontoken=${encodeURI(__sessionToken)}&regaintoken=${encodeURI(__regainToken)}`;
+  return new Promise((resolve, rejected) => {
+    callServer(query, __serverEncryptionToken).then((val) => {
+      __sessionToken = val.sessiontoken;
+      __regainToken = val.regaintoken;
+      __serverEncryptionToken = updateEncryptionToken(__serverEncryptionToken, __sessionToken);
+      __deviceEncryptionToken = updateEncryptionToken(__deviceSecret, __sessionToken);
+      resolve(true);
+    }).catch((error) => {
+      rejected(error);
+    });
+  });
+};
+
+
 exports.disconnect = function () {
   const query = `/my/disconnect?sessiontoken=${encodeURI(__sessionToken)}`;
   return new Promise((resolve, rejected) => {
@@ -201,12 +217,48 @@ exports.getDirectConnectionInfos = deviceId => new Promise((resolve, rejected) =
     });
 });
 
-exports.addLinks = (links, deviceId) => {
-  const params = `{"priority":"DEFAULT","links":"${links}","autostart":true}`;
+exports.addLinks = (links, deviceId, autostart) => {
+  const params = `{"priority":"DEFAULT","links":"${links}","autostart":${autostart}}`;
   return new Promise((resolve, rejected) => {
     callAction('/linkgrabberv2/addLinks', deviceId, [params])
       .then((val) => {
-        console.log('not');
+        resolve(val);
+      }).catch((error) => {
+        rejected(error);
+      });
+  });
+};
+
+exports.queryLinks = (deviceId) => {
+  const params = '{}';
+  return new Promise((resolve, rejected) => {
+    callAction('/downloadsV2/queryLinks', deviceId, [params])
+      .then((val) => {
+        resolve(val);
+      }).catch((error) => {
+        rejected(error);
+      });
+  });
+};
+
+exports.queryPackages = (deviceId, packagesIds) => {
+  const params = `{"addedDate" : true,
+  "bytesLoaded": true,
+  "bytesTotal": true,
+  "enabled": true,
+  "finished": true,
+  "url": true,
+  "status": true,
+  "speed": true,
+  "finishedDate": true,
+  "priority" : true,
+  "extractionStatus": true,
+  "host": true,
+  "running" : true,
+  "packageUUIDs" : [${packagesIds}]}`;
+  return new Promise((resolve, rejected) => {
+    callAction('/downloadsV2/queryPackages', deviceId, [params])
+      .then((val) => {
         resolve(val);
       }).catch((error) => {
         rejected(error);
