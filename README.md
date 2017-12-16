@@ -10,9 +10,12 @@ https://github.com/tofika/my.jdownloader.org-api-php-class
 Features
 --------
 - Connect to the My.JDownloader service
+- Reconnect
 - Disconnect from the My.JDownloader service
 - List Devices
 - Add Links and start download
+- List actual links from the download are
+- List all packages and get current download status
 
 Usage
 --------
