@@ -1,6 +1,6 @@
 {
   "name": "jdownloader-api",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A node wrapper module for My.Jdownloader.org API",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "aes-js": "^3.1.0",
     "ezcrypto": "0.0.3",
     "pkcs7": "^1.0.2",
-    "request": "^2.83.0",
+    "request": "^2.88.0",
     "request-promise": "^4.2.2",
     "text-encoding": "^0.6.4"
   }

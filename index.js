@@ -230,7 +230,19 @@ exports.addLinks = (links, deviceId, autostart) => {
 };
 
 exports.queryLinks = (deviceId) => {
-  const params = '{}';
+  const params = `{"addedDate" : true,
+                   "bytesLoaded": true,
+                   "bytesTotal": true,
+                   "enabled": true,
+                   "finished": true,
+                   "url": true,
+                   "status": true,
+                   "speed": true,
+                   "finishedDate": true,
+                   "priority" : true,
+                   "extractionStatus": true,
+                   "host": true,
+                   "running" : true}`;
   return new Promise((resolve, rejected) => {
     callAction('/downloadsV2/queryLinks', deviceId, [params])
       .then((val) => {
