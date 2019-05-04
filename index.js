@@ -134,7 +134,7 @@ const callAction = (action, deviceId, params) => {
         const result = decrypt(parsedBody, __deviceEncryptionToken);
         resolve(JSON.parse(unescapeJson(result)));
       }).catch((err) => {
-        rejected(err);
+        rejected(decrypt(err.error, __deviceEncryptionToken));
       });
   });
 };
@@ -276,4 +276,16 @@ exports.queryPackages = (deviceId, packagesIds) => {
         rejected(error);
       });
   });
+};
+
+exports.cleanUpFinishedLinks = (deviceId) => {
+    const params =  ["[]", "[]", "DELETE_FINISHED", "REMOVE_LINKS_ONLY", "ALL"];
+    return new Promise((resolve, rejected) => {
+        callAction('/downloadsV2/cleanup', deviceId, params)
+          .then((val) => {
+            resolve(val);
+          }).catch((error) => {
+            rejected(error);
+          });
+      });
 };
