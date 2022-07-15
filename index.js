@@ -217,8 +217,9 @@ exports.getDirectConnectionInfos = deviceId => new Promise((resolve, rejected) =
     });
 });
 
-exports.addLinks = (links, deviceId, autostart) => {
-  const params = `{"priority":"DEFAULT","links":"${links}","autostart":${autostart}}`;
+exports.addLinks = (links, deviceId, autostart, packageName = null) => {
+  const packageNameParam = packageName !== null ? `,"packageName": "${packageName}"` : '' ;
+  const params = `{"priority":"DEFAULT","links":"${links}","autostart":${autostart}${packageNameParam}}`;
   return new Promise((resolve, rejected) => {
     callAction('/linkgrabberv2/addLinks', deviceId, [params])
       .then((val) => {
